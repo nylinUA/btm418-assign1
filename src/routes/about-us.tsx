@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Mail,
@@ -5,18 +6,21 @@ import {
   MessageCircle,
   Clock,
   MapPin,
-  Globe,
   ChevronRight,
   Building2,
   ShoppingBag,
   Cpu,
   Store,
   AlertCircle,
+  Send,
+  CheckCircle2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/about-us")({
   component: AboutUs,
 });
+
+const DEMO_BASE_URL = "https://nylinua.github.io/btm418-assign1/";
 
 function SectionHead({ title }: { title: string }) {
   return (
@@ -54,12 +58,12 @@ const BUSINESS_LINES = [
   {
     icon: ShoppingBag,
     title: "E-Commerce",
-    desc: "Operates suruga-ya.jp (Japan) and suruga-ya.com (international) — one of the largest online marketplaces for second-hand anime, games, music, books, and hobby goods.",
+    desc: "Operates online marketplaces for second-hand anime, games, music, books, and hobby goods.",
   },
   {
     icon: Store,
     title: "Retail Stores",
-    desc: "Owns and franchises comprehensive hobby and media reuse stores across Japan, including flagship locations in Akihabara, Shinjuku, Osaka Nipponbashi, and the home-base main store in Shizuoka.",
+    desc: "Owns and franchises comprehensive hobby and media reuse stores across Japan, including flagship locations in Akihabara, Shinjuku, Osaka Nipponbashi, and Shizuoka.",
   },
   {
     icon: Cpu,
@@ -73,6 +77,166 @@ const OFFICES = [
   { label: "Tokyo Branch", detail: "Akihabara, Chiyoda-ku, Tokyo, Japan" },
   { label: "Osaka Branch", detail: "Naniwa-ku, Osaka City, Osaka, Japan" },
 ];
+
+function InquiryForm() {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    orderNumber: "",
+    inquiryType: "Order Status / Change an order",
+    message: "",
+  });
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  const handleReset = () => {
+    setFormData({
+      fullName: "",
+      email: "",
+      orderNumber: "",
+      inquiryType: "Order Status / Change an order",
+      message: "",
+    });
+    setSubmitted(false);
+  };
+
+  return (
+    <div className="rounded border border-border bg-card p-6 shadow-sm">
+      <div className="mb-4">
+        <h3 className="font-display text-base font-bold text-foreground">
+          Send an Inquiry
+        </h3>
+        <p className="text-xs text-muted-foreground mt-1">
+          Have questions about an order or product? Fill out the form below.
+        </p>
+      </div>
+
+      {submitted ? (
+        <div className="rounded border border-emerald-500/30 bg-emerald-500/10 p-6 text-center space-y-3">
+          <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-600" />
+          <h4 className="font-display text-base font-semibold text-emerald-950 dark:text-emerald-200">
+            Inquiry Sent Successfully
+          </h4>
+          <p className="text-xs text-emerald-800 dark:text-emerald-300 max-w-md mx-auto">
+            Thank you for contacting us! This demo form has received your message for
+            <strong> {formData.email}</strong>.
+          </p>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="mt-2 inline-flex items-center justify-center rounded bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Submit Another Inquiry
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+          <div className="grid grid-cols-2 gap-4">
+            {/* Full Name */}
+            <div className="space-y-1">
+              <label htmlFor="fullName" className="font-semibold text-foreground">
+                Full Name <span className="text-destructive">*</span>
+              </label>
+              <input
+                id="fullName"
+                type="text"
+                required
+                value={formData.fullName}
+                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                placeholder="e.g. Taro Yamada"
+                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+            </div>
+
+            {/* Email Address */}
+            <div className="space-y-1">
+              <label htmlFor="email" className="font-semibold text-foreground">
+                Email Address <span className="text-destructive">*</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="name@example.com"
+                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            {/* Inquiry Type */}
+            <div className="space-y-1">
+              <label htmlFor="inquiryType" className="font-semibold text-foreground">
+                Inquiry Type <span className="text-destructive">*</span>
+              </label>
+              <select
+                id="inquiryType"
+                required
+                value={formData.inquiryType}
+                onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
+                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              >
+                <option value="Order Status / Change an order">Order Status / Change an Order</option>
+                <option value="Delivery / Shipping Information">Delivery / Shipping Information</option>
+                <option value="Product / Stock Availability">Product / Stock Availability</option>
+                <option value="Payment / Refund Issue">Payment / Refund Issue</option>
+                <option value="Account / Login Support">Account / Login Support</option>
+                <option value="Other / General Questions">Other / General Questions</option>
+              </select>
+            </div>
+
+            {/* Order Number (Optional) */}
+            <div className="space-y-1">
+              <label htmlFor="orderNumber" className="font-semibold text-foreground">
+                Order Number <span className="text-muted-foreground font-normal">(Optional)</span>
+              </label>
+              <input
+                id="orderNumber"
+                type="text"
+                value={formData.orderNumber}
+                onChange={(e) => setFormData({ ...formData, orderNumber: e.target.value })}
+                placeholder="e.g. SRG-123456"
+                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+            </div>
+          </div>
+
+          {/* Message / Inquiry Content */}
+          <div className="space-y-1">
+            <label htmlFor="message" className="font-semibold text-foreground">
+              Contents of Inquiry <span className="text-destructive">*</span>
+            </label>
+            <textarea
+              id="message"
+              required
+              rows={4}
+              value={formData.message}
+              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              placeholder="Please describe your inquiry in detail..."
+              className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-y"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="inline-flex items-center gap-2 rounded bg-primary px-5 py-2.5 font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          >
+            <Send className="h-3.5 w-3.5" />
+            Send Inquiry
+          </button>
+        </form>
+      )}
+    </div>
+  );
+}
 
 export default function AboutUs() {
   return (
@@ -97,8 +261,7 @@ export default function AboutUs() {
             Japan's Largest Specialty<br />Reuse Retailer
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-header-muted">
-            SURUGA-YA Inc. connects people worldwide with millions of pre-owned games,
-            anime, music, books, and hobby goods — giving beloved items a second life.
+            Connecting people worldwide with pre-owned games, anime, music, books, and hobby goods — giving beloved items a second life.
           </p>
         </div>
       </div>
@@ -115,8 +278,7 @@ export default function AboutUs() {
             <div className="space-y-3 text-sm leading-relaxed text-foreground">
               <p>
                 <strong>SURUGA-YA Inc.</strong> (株式会社駿河屋) is Japan's leading comprehensive
-                hobby and media reuse retailer. The company launched its internet mail-order site
-                <em> suruga-ya.jp</em> in April 1998 and has grown into a multi-channel retailer
+                hobby and media reuse retailer. Launched in April 1998, it has grown into a multi-channel retailer
                 spanning e-commerce, physical stores, and B2B technology solutions.
               </p>
               <p>
@@ -124,11 +286,10 @@ export default function AboutUs() {
                 champions a circular economy — items no longer needed by one person find their way
                 to another who values them. With millions of listings across video games, anime
                 merchandise, Blu-ray, music, trading cards, figures, and doujin works, the platform
-                serves collectors and enthusiasts in over 100 countries.
+                serves collectors and enthusiasts worldwide.
               </p>
               <p>
-                International customers shop via <strong>suruga-ya.com</strong>, with English
-                support, multi-currency checkout, and worldwide shipping.
+                International customers can explore products directly on this educational website demo.
               </p>
             </div>
           </section>
@@ -147,6 +308,12 @@ export default function AboutUs() {
                 </div>
               ))}
             </div>
+          </section>
+
+          {/* Contact / Inquiry Form Section */}
+          <section>
+            <SectionHead title="Contact Us / Inquiry Form" />
+            <InquiryForm />
           </section>
 
           {/* Offices */}
@@ -181,15 +348,12 @@ export default function AboutUs() {
             <p>
               This is an <strong>unofficial educational website</strong> created for BTM 418 at the
               University of Alberta. It is not affiliated with, endorsed by, or operated by
-              SURUGA-YA Inc. All company information is sourced from publicly available materials.
-              For official inquiries, visit{" "}
+              SURUGA-YA Inc. For project details, visit{" "}
               <a
-                href="https://www.suruga-ya.com"
+                href={DEMO_BASE_URL}
                 className="underline hover:text-primary"
-                target="_blank"
-                rel="noopener noreferrer"
               >
-                suruga-ya.com
+                nylinua.github.io/btm418-assign1/
               </a>.
             </p>
           </div>
@@ -204,14 +368,12 @@ export default function AboutUs() {
             <div className="space-y-px p-3">
               <InfoCard icon={Mail} label="Email Support">
                 <a
-                  href="https://www.suruga-ya.com/en/contact-us"
+                  href="#inquiry-form"
                   className="text-primary hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
-                  Submit an inquiry →
+                  Submit an inquiry ↓
                 </a>
-                <div className="mt-0.5 text-muted-foreground">reference@suruga-ya.com</div>
+                <div className="mt-0.5 text-muted-foreground">demo@nylinua.github.io</div>
               </InfoCard>
 
               <div className="py-1" />
@@ -226,12 +388,6 @@ export default function AboutUs() {
               <InfoCard icon={MessageCircle} label="LINE Chat">
                 <span className="font-mono">@689laiwc</span>
                 <div className="mt-0.5 text-muted-foreground">Japanese &amp; English</div>
-              </InfoCard>
-
-              <div className="py-1" />
-
-              <InfoCard icon={Globe} label="Languages Supported">
-                English and Japanese only
               </InfoCard>
             </div>
           </div>
@@ -278,20 +434,18 @@ export default function AboutUs() {
           {/* Quick links */}
           <div className="rounded border border-border bg-card">
             <h3 className="border-b border-border px-4 py-3 font-display text-sm font-bold uppercase tracking-wide">
-              Official Links
+              Demo Links
             </h3>
             <ul className="divide-y divide-border">
               {[
-                ["International Store", "https://www.suruga-ya.com/en"],
-                ["Contact / Inquiry Form", "https://www.suruga-ya.com/en/contact-us"],
-                ["Shipping Information", "https://www.suruga-ya.com/en/shipping"],
-                ["Q&A / FAQ", "https://www.suruga-ya.com/en/faq"],
+                ["Demo Homepage", DEMO_BASE_URL],
+                ["Contact / Inquiry Form", DEMO_BASE_URL],
+                ["Shipping Information", DEMO_BASE_URL],
+                ["Q&A / FAQ", DEMO_BASE_URL],
               ].map(([label, href]) => (
                 <li key={label}>
                   <a
                     href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="flex items-center justify-between px-4 py-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
                   >
                     {label}
