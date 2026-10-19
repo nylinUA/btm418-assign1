@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/btm418-assign1/favicon.png" />
+    <title>Suruga-ya — Japanese Games, Anime, Music &amp; Collectibles</title>
+    <!-- GitHub Pages SPA redirect receiver: restores the URL captured by 404.html -->
+    <script>
+      (function () {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+        // Also handle the query-string encoding from 404.html
+        var search = location.search;
+        if (search) {
+          var p = new URLSearchParams(search);
+          var path = p.get("p");
+          if (path) {
+            var rest = location.search
+              .slice(1)
+              .split("&")
+              .filter(function (s) {
+                return !s.startsWith("p=") && !s.startsWith("q=");
+              })
+              .join("&");
+            var q = p.get("q");
+            history.replaceState(
+              null,
+              null,
+              path + (q ? "?" + q.replace(/~and~/g, "&") : "") + (rest ? (q ? "&" : "?") + rest : "") + location.hash,
+            );
+          }
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

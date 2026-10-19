@@ -1,10 +1,10 @@
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
-export const getRouter = () => {
-  const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
+export const getRouter = () => {
   const router = createRouter({
     routeTree,
     context: { queryClient },
@@ -14,3 +14,10 @@ export const getRouter = () => {
 
   return router;
 };
+
+// Augment the router context so child routes can use queryClient
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: ReturnType<typeof getRouter>;
+  }
+}

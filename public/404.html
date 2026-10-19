@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Suruga-ya</title>
+    <!-- GitHub Pages SPA redirect: forwards unknown paths back to index.html via hash -->
+    <script>
+      // Capture the current path and redirect to the base URL with the path encoded in the query string.
+      // The main index.html picks this up and replaces the URL via history.replaceState.
+      var segmentCount = 1; // number of path segments in the repo base (1 = /btm418-assign1)
+      var l = window.location;
+      l.replace(
+        l.protocol +
+          "//" +
+          l.hostname +
+          (l.port ? ":" + l.port : "") +
+          l.pathname
+            .split("/")
+            .slice(0, 1 + segmentCount)
+            .join("/") +
+          "/?p=/" +
+          l.pathname
+            .slice(1)
+            .split("/")
+            .slice(segmentCount)
+            .join("/")
+            .replace(/&/g, "~and~") +
+          (l.search ? "&q=" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash,
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
