@@ -19,13 +19,21 @@ export const CATS = [
 export function StorefrontHeader() {
   return (
     <header className="bg-header text-header-foreground">
+      {/* WCAG 2.4.1 Skip to main content landmark */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-foreground"
+      >
+        Skip to main content
+      </a>
+
       <div className="border-b border-header-foreground/10">
         <div className="mx-auto flex h-8 max-w-[1320px] items-center justify-between px-6 text-xs text-header-muted">
           <span>Japan's largest specialty retailer for games, anime & hobby — shipping to 100+ countries</span>
           <div className="flex items-center gap-5">
-            <Link className="hover:text-header-foreground" to="/about-us">About Us</Link>
-            <a className="hover:text-header-foreground" href="#">Shipping Info</a>
-            <span className="flex items-center gap-1"><Globe className="h-3 w-3" /> English · CAD</span>
+            <Link className="transition-colors hover:text-header-foreground" to="/about-us">About Us</Link>
+            <a className="transition-colors hover:text-header-foreground" href="#">Shipping Info</a>
+            <span className="flex items-center gap-1"><Globe className="h-3 w-3" aria-hidden="true" /> English · CAD</span>
           </div>
         </div>
       </div>
@@ -33,25 +41,48 @@ export function StorefrontHeader() {
         <Link to="/" aria-label="Suruga-ya home" className="flex shrink-0 items-center rounded-md bg-card px-4 py-2.5">
           <img src={logoAsset} alt="Suruga-ya" className="h-10 w-auto" />
         </Link>
-        <form className="flex h-11 flex-1 overflow-hidden rounded bg-card" onSubmit={(e) => e.preventDefault()}>
-          <select className="border-r border-border bg-muted px-3 text-sm text-foreground outline-none">
+        <form className="flex h-11 flex-1 overflow-hidden rounded bg-card" onSubmit={(e) => e.preventDefault()} role="search">
+          <label htmlFor="header-category-select" className="sr-only">Search Category</label>
+          <select
+            id="header-category-select"
+            name="category"
+            aria-label="Filter search by category"
+            className="border-r border-border bg-muted px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary"
+          >
             <option>All Categories</option>
             {CATS.map((c) => <option key={c.id}>{c.name}</option>)}
           </select>
-          <input className="flex-1 px-4 text-sm text-foreground outline-none" placeholder="Search by title, character, JAN code or product number…" />
-          <Button type="submit" className="h-full rounded-none px-6">
-            <Search className="h-4 w-4" /> Search
+
+          <label htmlFor="header-search-input" className="sr-only">Search products</label>
+          <input
+            id="header-search-input"
+            name="search"
+            type="search"
+            aria-label="Search by title, character, JAN code or product number"
+            className="flex-1 px-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary"
+            placeholder="Search by title, character, JAN code or product number…"
+          />
+          <Button type="submit" className="h-full rounded-none px-6" aria-label="Search products">
+            <Search className="h-4 w-4" aria-hidden="true" /> Search
           </Button>
         </form>
-        <nav className="flex items-center gap-6 text-sm">
-          <a href="#" className="flex items-center gap-2 hover:text-primary"><User className="h-5 w-5" /><span className="leading-tight"><span className="block text-[11px] text-header-muted">Hello, sign in</span>Account</span></a>
-          <a href="#" className="flex items-center gap-2 hover:text-primary"><Heart className="h-5 w-5" />Wishlist</a>
-          <a href="#" className="relative flex items-center gap-2 hover:text-primary"><ShoppingCart className="h-5 w-5" />Cart<span className="absolute -left-2 -top-2 rounded-full bg-primary px-1.5 text-[10px] font-semibold text-primary-foreground">0</span></a>
+        <nav className="flex items-center gap-6 text-sm" aria-label="User navigation">
+          <a href="#" className="flex items-center gap-2 transition-colors hover:text-header-foreground" aria-label="Account, Hello, sign in">
+            <User className="h-5 w-5" aria-hidden="true" />
+            <span className="leading-tight"><span className="block text-[11px] text-header-muted">Hello, sign in</span>Account</span>
+          </a>
+          <a href="#" className="flex items-center gap-2 transition-colors hover:text-header-foreground" aria-label="Wishlist">
+            <Heart className="h-5 w-5" aria-hidden="true" />Wishlist
+          </a>
+          <a href="#" className="relative flex items-center gap-2 transition-colors hover:text-header-foreground" aria-label="Shopping Cart, 0 items">
+            <ShoppingCart className="h-5 w-5" aria-hidden="true" />Cart
+            <span className="absolute -left-2 -top-2 rounded-full bg-primary px-1.5 text-[10px] font-semibold text-primary-foreground" aria-hidden="true">0</span>
+          </a>
         </nav>
       </div>
       <div className="bg-nav">
         <div className="mx-auto flex h-10 max-w-[1320px] items-center gap-1 px-6 text-sm">
-          <span className="mr-3 flex items-center gap-2 font-semibold"><Menu className="h-4 w-4" />All Departments</span>
+          <span className="mr-3 flex items-center gap-2 font-semibold"><Menu className="h-4 w-4" aria-hidden="true" />All Departments</span>
           {CATS.slice(0, 8).map((c) => (
             <a key={c.id} href={`${BASE}/en/category/${c.id}`} className="rounded px-3 py-1.5 text-header-muted hover:bg-header-foreground/10 hover:text-header-foreground">{c.name}</a>
           ))}

@@ -106,7 +106,7 @@ function InquiryForm() {
   };
 
   return (
-    <div className="rounded border border-border bg-card p-6 shadow-sm">
+    <div className="rounded border border-border bg-card p-6 shadow-sm" id="inquiry-form">
       <div className="mb-4">
         <h3 className="font-display text-base font-bold text-foreground">
           Send an Inquiry
@@ -117,71 +117,80 @@ function InquiryForm() {
       </div>
 
       {submitted ? (
-        <div className="rounded border border-emerald-500/30 bg-emerald-500/10 p-6 text-center space-y-3">
-          <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-600" />
+        <div className="rounded border border-emerald-500/30 bg-emerald-500/10 p-6 text-center space-y-3" role="status" aria-live="polite">
+          <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
           <h4 className="font-display text-base font-semibold text-emerald-950 dark:text-emerald-200">
             Inquiry Sent Successfully
           </h4>
-          <p className="text-xs text-emerald-800 dark:text-emerald-300 max-w-md mx-auto">
+          <p className="text-xs text-emerald-900 dark:text-emerald-300 max-w-md mx-auto">
             Thank you for contacting us! This demo form has received your message for
             <strong> {formData.email}</strong>.
           </p>
           <button
             type="button"
             onClick={handleReset}
-            className="mt-2 inline-flex items-center justify-center rounded bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            className="mt-2 inline-flex items-center justify-center rounded bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
             Submit Another Inquiry
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs" noValidate={false}>
           <div className="grid grid-cols-2 gap-4">
             {/* Full Name */}
             <div className="space-y-1">
               <label htmlFor="fullName" className="font-semibold text-foreground">
-                Full Name <span className="text-destructive">*</span>
+                Full Name <span className="text-destructive font-bold" aria-hidden="true">*</span>
               </label>
               <input
                 id="fullName"
+                name="fullName"
                 type="text"
                 required
+                aria-required="true"
+                autoComplete="name"
                 value={formData.fullName}
                 onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                 placeholder="e.g. Taro Yamada"
-                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
 
             {/* Email Address */}
             <div className="space-y-1">
               <label htmlFor="email" className="font-semibold text-foreground">
-                Email Address <span className="text-destructive">*</span>
+                Email Address <span className="text-destructive font-bold" aria-hidden="true">*</span>
               </label>
               <input
                 id="email"
+                name="email"
                 type="email"
                 required
+                aria-required="true"
+                autoComplete="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="name@example.com"
-                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            {/* Inquiry Type */}
+            {/* Inquiry Type Dropdown with accessible label and ARIA */}
             <div className="space-y-1">
               <label htmlFor="inquiryType" className="font-semibold text-foreground">
-                Inquiry Type <span className="text-destructive">*</span>
+                Inquiry Type <span className="text-destructive font-bold" aria-hidden="true">*</span>
               </label>
               <select
                 id="inquiryType"
+                name="inquiryType"
                 required
+                aria-required="true"
+                aria-label="Inquiry Type"
                 value={formData.inquiryType}
                 onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
-                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="Order Status / Change an order">Order Status / Change an Order</option>
                 <option value="Delivery / Shipping Information">Delivery / Shipping Information</option>
@@ -199,11 +208,12 @@ function InquiryForm() {
               </label>
               <input
                 id="orderNumber"
+                name="orderNumber"
                 type="text"
                 value={formData.orderNumber}
                 onChange={(e) => setFormData({ ...formData, orderNumber: e.target.value })}
                 placeholder="e.g. SRG-123456"
-                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -211,16 +221,18 @@ function InquiryForm() {
           {/* Message / Inquiry Content */}
           <div className="space-y-1">
             <label htmlFor="message" className="font-semibold text-foreground">
-              Contents of Inquiry <span className="text-destructive">*</span>
+              Contents of Inquiry <span className="text-destructive font-bold" aria-hidden="true">*</span>
             </label>
             <textarea
               id="message"
+              name="message"
               required
+              aria-required="true"
               rows={4}
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               placeholder="Please describe your inquiry in detail..."
-              className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-y"
+              className="w-full rounded border border-input bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-y"
             />
           </div>
 
@@ -229,7 +241,7 @@ function InquiryForm() {
             type="submit"
             className="inline-flex items-center gap-2 rounded bg-primary px-5 py-2.5 font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
-            <Send className="h-3.5 w-3.5" />
+            <Send className="h-3.5 w-3.5" aria-hidden="true" />
             Send Inquiry
           </button>
         </form>
@@ -240,27 +252,30 @@ function InquiryForm() {
 
 export default function AboutUs() {
   return (
-    <main className="mx-auto max-w-[1320px] space-y-10 px-6 py-8">
+    <main id="main-content" className="mx-auto max-w-[1320px] space-y-10 px-6 py-8" tabIndex={-1}>
 
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <Link to="/" className="hover:text-primary">Home</Link>
-        <ChevronRight className="h-3 w-3" />
-        <span className="text-foreground">About Us</span>
+      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <Link to="/" className="text-foreground hover:text-primary focus:outline-none focus:ring-1 focus:ring-primary">Home</Link>
+        <ChevronRight className="h-3 w-3" aria-hidden="true" />
+        <span className="font-medium text-foreground" aria-current="page">About Us</span>
       </nav>
 
-      {/* Hero banner */}
+      {/* Hero banner with level-one heading */}
       <div className="relative overflow-hidden rounded border border-border bg-gradient-to-br from-header via-nav to-primary px-10 py-14 text-header-foreground">
-        <div className="absolute -right-16 -top-16 h-72 w-72 rounded-full border-[36px] border-header-foreground/10" />
-        <div className="absolute -bottom-10 -left-10 h-48 w-48 rounded-full border-[24px] border-header-foreground/10" />
+        <div className="absolute -right-16 -top-16 h-72 w-72 rounded-full border-[36px] border-header-foreground/10" aria-hidden="true" />
+        <div className="absolute -bottom-10 -left-10 h-48 w-48 rounded-full border-[24px] border-header-foreground/10" aria-hidden="true" />
         <div className="relative">
           <span className="mb-3 inline-block rounded bg-primary px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-primary-foreground">
             Since 1998
           </span>
           <h1 className="font-display text-4xl font-extrabold leading-tight">
-            Japan's Largest Specialty<br />Reuse Retailer
+            About Suruga-ya
+            <span className="mt-2 block text-2xl font-bold text-header-foreground/95">
+              Japan's Largest Specialty Reuse Retailer
+            </span>
           </h1>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-header-muted">
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-header-foreground/90">
             Connecting people worldwide with pre-owned games, anime, music, books, and hobby goods — giving beloved items a second life.
           </p>
         </div>
@@ -273,8 +288,12 @@ export default function AboutUs() {
         <div className="space-y-10">
 
           {/* Company overview */}
-          <section>
-            <SectionHead title="About Suruga-ya" />
+          <section aria-labelledby="about-surugaya-heading">
+            <div className="mb-4 flex items-end border-b-2 border-foreground pb-2">
+              <h2 id="about-surugaya-heading" className="font-display text-lg font-bold tracking-tight text-foreground">
+                About Suruga-ya
+              </h2>
+            </div>
             <div className="space-y-3 text-sm leading-relaxed text-foreground">
               <p>
                 <strong>SURUGA-YA Inc.</strong> (株式会社駿河屋) is Japan's leading comprehensive
@@ -295,15 +314,19 @@ export default function AboutUs() {
           </section>
 
           {/* Business lines */}
-          <section>
-            <SectionHead title="What We Do" />
+          <section aria-labelledby="what-we-do-heading">
+            <div className="mb-4 flex items-end border-b-2 border-foreground pb-2">
+              <h2 id="what-we-do-heading" className="font-display text-lg font-bold tracking-tight text-foreground">
+                What We Do
+              </h2>
+            </div>
             <div className="grid grid-cols-3 gap-4">
               {BUSINESS_LINES.map(({ icon: Icon, title, desc }) => (
                 <div key={title} className="rounded border border-border bg-card p-5">
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded bg-primary/10">
-                    <Icon className="h-5 w-5 text-primary" />
+                    <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
                   </div>
-                  <div className="mb-2 font-display text-sm font-bold">{title}</div>
+                  <h3 className="mb-2 font-display text-sm font-bold text-foreground">{title}</h3>
                   <p className="text-[13px] leading-relaxed text-muted-foreground">{desc}</p>
                 </div>
               ))}
@@ -311,14 +334,22 @@ export default function AboutUs() {
           </section>
 
           {/* Contact / Inquiry Form Section */}
-          <section>
-            <SectionHead title="Contact Us / Inquiry Form" />
+          <section aria-labelledby="inquiry-form-heading">
+            <div className="mb-4 flex items-end border-b-2 border-foreground pb-2">
+              <h2 id="inquiry-form-heading" className="font-display text-lg font-bold tracking-tight text-foreground">
+                Contact Us / Inquiry Form
+              </h2>
+            </div>
             <InquiryForm />
           </section>
 
           {/* Offices */}
-          <section>
-            <SectionHead title="Our Locations" />
+          <section aria-labelledby="locations-heading">
+            <div className="mb-4 flex items-end border-b-2 border-foreground pb-2">
+              <h2 id="locations-heading" className="font-display text-lg font-bold tracking-tight text-foreground">
+                Our Locations
+              </h2>
+            </div>
             <div className="overflow-hidden rounded border border-border bg-card">
               {OFFICES.map(({ label, detail }, i) => (
                 <div
@@ -326,14 +357,14 @@ export default function AboutUs() {
                   className={`flex items-start gap-4 px-5 py-4 ${i < OFFICES.length - 1 ? "border-b border-border" : ""}`}
                 >
                   <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded bg-muted">
-                    <Building2 className="h-4 w-4 text-muted-foreground" />
+                    <Building2 className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   </div>
                   <div>
                     <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                       {label}
                     </div>
-                    <div className="mt-0.5 flex items-center gap-1.5 text-sm">
-                      <MapPin className="h-3.5 w-3.5 shrink-0 text-primary" />
+                    <div className="mt-0.5 flex items-center gap-1.5 text-sm text-foreground">
+                      <MapPin className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
                       {detail}
                     </div>
                   </div>
@@ -343,15 +374,15 @@ export default function AboutUs() {
           </section>
 
           {/* Disclaimer */}
-          <div className="flex gap-3 rounded border border-border bg-muted/60 px-4 py-3 text-xs text-muted-foreground">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+          <div className="flex gap-3 rounded border border-border bg-muted/60 px-4 py-3 text-xs text-foreground">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
             <p>
               This is an <strong>unofficial educational website</strong> created for BTM 418 at the
               University of Alberta. It is not affiliated with, endorsed by, or operated by
               SURUGA-YA Inc. For project details, visit{" "}
               <a
                 href={DEMO_BASE_URL}
-                className="underline hover:text-primary"
+                className="font-medium text-primary underline hover:text-primary/80 focus:outline-none focus:ring-1 focus:ring-primary"
               >
                 nylinua.github.io/btm418-assign1/
               </a>.
@@ -360,16 +391,16 @@ export default function AboutUs() {
         </div>
 
         {/* Right rail: contact info */}
-        <aside className="space-y-4">
+        <aside className="space-y-4" aria-label="Suruga-ya Contact Information and Hours">
           <div className="rounded border border-border bg-card">
-            <h3 className="border-b border-border px-4 py-3 font-display text-sm font-bold uppercase tracking-wide">
+            <h2 className="border-b border-border px-4 py-3 font-display text-sm font-bold uppercase tracking-wide text-foreground">
               Contact &amp; Support
-            </h3>
+            </h2>
             <div className="space-y-px p-3">
               <InfoCard icon={Mail} label="Email Support">
                 <a
                   href="#inquiry-form"
-                  className="text-primary hover:underline"
+                  className="font-medium text-primary hover:underline focus:outline-none focus:ring-1 focus:ring-primary"
                 >
                   Submit an inquiry ↓
                 </a>
@@ -379,14 +410,14 @@ export default function AboutUs() {
               <div className="py-1" />
 
               <InfoCard icon={Phone} label="Phone (Global Support)">
-                <span className="font-mono">+81-54-333-9131</span>
+                <span className="font-mono text-foreground">+81-54-333-9131</span>
                 <div className="mt-0.5 text-muted-foreground">Fax: +81-54-251-3220</div>
               </InfoCard>
 
               <div className="py-1" />
 
               <InfoCard icon={MessageCircle} label="LINE Chat">
-                <span className="font-mono">@689laiwc</span>
+                <span className="font-mono text-foreground">@689laiwc</span>
                 <div className="mt-0.5 text-muted-foreground">Japanese &amp; English</div>
               </InfoCard>
             </div>
@@ -394,37 +425,37 @@ export default function AboutUs() {
 
           {/* Hours */}
           <div className="rounded border border-border bg-card">
-            <h3 className="border-b border-border px-4 py-3 font-display text-sm font-bold uppercase tracking-wide">
+            <h2 className="border-b border-border px-4 py-3 font-display text-sm font-bold uppercase tracking-wide text-foreground">
               Support Hours <span className="font-normal text-muted-foreground">(JST / UTC+9)</span>
-            </h3>
+            </h2>
             <div className="p-4 text-sm">
               <div className="mb-3">
-                <div className="mb-1 flex items-center gap-2 font-semibold">
-                  <Clock className="h-4 w-4 text-primary" /> Phone &amp; Email
+                <div className="mb-1 flex items-center gap-2 font-semibold text-foreground">
+                  <Clock className="h-4 w-4 text-primary" aria-hidden="true" /> Phone &amp; Email
                 </div>
                 <div className="ml-6 space-y-1 text-muted-foreground">
                   <div className="flex justify-between">
                     <span>Weekdays</span>
-                    <span>10:30 – 19:30</span>
+                    <span className="font-medium text-foreground">10:30 – 19:30</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Weekends &amp; Holidays</span>
-                    <span>10:30 – 18:00</span>
+                    <span className="font-medium text-foreground">10:30 – 18:00</span>
                   </div>
                 </div>
               </div>
               <div className="border-t border-border pt-3">
-                <div className="mb-1 flex items-center gap-2 font-semibold">
-                  <MessageCircle className="h-4 w-4 text-primary" /> LINE Chat
+                <div className="mb-1 flex items-center gap-2 font-semibold text-foreground">
+                  <MessageCircle className="h-4 w-4 text-primary" aria-hidden="true" /> LINE Chat
                 </div>
                 <div className="ml-6 space-y-1 text-muted-foreground">
                   <div className="flex justify-between">
                     <span>Weekdays</span>
-                    <span>10:00 – 19:00</span>
+                    <span className="font-medium text-foreground">10:00 – 19:00</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Weekends &amp; Holidays</span>
-                    <span>10:00 – 17:00</span>
+                    <span className="font-medium text-foreground">10:00 – 17:00</span>
                   </div>
                 </div>
               </div>
@@ -433,9 +464,9 @@ export default function AboutUs() {
 
           {/* Quick links */}
           <div className="rounded border border-border bg-card">
-            <h3 className="border-b border-border px-4 py-3 font-display text-sm font-bold uppercase tracking-wide">
+            <h2 className="border-b border-border px-4 py-3 font-display text-sm font-bold uppercase tracking-wide text-foreground">
               Demo Links
-            </h3>
+            </h2>
             <ul className="divide-y divide-border">
               {[
                 ["Demo Homepage", DEMO_BASE_URL],
@@ -446,10 +477,10 @@ export default function AboutUs() {
                 <li key={label}>
                   <a
                     href={href}
-                    className="flex items-center justify-between px-4 py-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                    className="flex items-center justify-between px-4 py-2.5 text-sm text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     {label}
-                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
                   </a>
                 </li>
               ))}
