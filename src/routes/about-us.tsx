@@ -14,6 +14,11 @@ import {
   AlertCircle,
   Send,
   CheckCircle2,
+  ShieldCheck,
+  SearchCheck,
+  Award,
+  PackageCheck,
+  Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/about-us")({
@@ -76,6 +81,57 @@ const OFFICES = [
   { label: "Head Office", detail: "5-4 Tenmacho, Aoi-ku, Shizuoka City, Shizuoka Prefecture 420-0858, Japan" },
   { label: "Tokyo Branch", detail: "Akihabara, Chiyoda-ku, Tokyo, Japan" },
   { label: "Osaka Branch", detail: "Naniwa-ku, Osaka City, Osaka, Japan" },
+];
+
+const GRADING_PILLARS = [
+  {
+    icon: ShieldCheck,
+    title: "1. Authentication & Bootleg Screening",
+    desc: "Specialists verify manufacturer holographic seals, production batch codes, packaging typography, and disc matrix runouts. Counterfeits and bootlegs are permanently rejected.",
+  },
+  {
+    icon: SearchCheck,
+    title: "2. Optical & Functional Hardware Testing",
+    desc: "Discs are scanned under high-CRI inspection lights for micro-scratches. Retro cartridges, consoles, and handhelds undergo pin connection, save battery, and display diagnostics.",
+  },
+  {
+    icon: Award,
+    title: "3. Rigorous 5-Tier Condition Rating",
+    desc: "Items are cataloged with standardized grading ranks (Brand New, Like New, Very Good, Minor Scratches, Box Damaged) so collectors know the exact state before purchase.",
+  },
+  {
+    icon: PackageCheck,
+    title: "4. Sanitization & Archival Repackaging",
+    desc: "Pre-owned media and figures are cleaned with anti-static agents and encased in fresh, crystal-clear archival poly sleeves or reinforced bubble wrap to prevent shelf and transit wear.",
+  },
+];
+
+const CONDITION_TIERS = [
+  {
+    badge: "Brand New",
+    badgeClass: "border-emerald-300 bg-emerald-100 text-emerald-900 dark:border-emerald-700/60 dark:bg-emerald-950/80 dark:text-emerald-200",
+    desc: "Factory sealed, unopened original packaging. Zero wear or handling marks.",
+  },
+  {
+    badge: "Like New",
+    badgeClass: "border-blue-300 bg-blue-100 text-blue-900 dark:border-blue-700/60 dark:bg-blue-950/80 dark:text-blue-200",
+    desc: "Opened but pristine condition. Minimal to no signs of previous handling; complete with all original inserts and manuals.",
+  },
+  {
+    badge: "Very Good",
+    badgeClass: "border-indigo-300 bg-indigo-100 text-indigo-900 dark:border-indigo-700/60 dark:bg-indigo-950/80 dark:text-indigo-200",
+    desc: "Minor signs of gentle previous ownership. Flawless functional performance; all primary accessories included.",
+  },
+  {
+    badge: "Minor Scratches",
+    badgeClass: "border-amber-300 bg-amber-100 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/80 dark:text-amber-200",
+    desc: "Light cosmetic surface abrasions on disc surface, figure base, or cartridge shell. 100% tested and fully functional.",
+  },
+  {
+    badge: "Box Damaged",
+    badgeClass: "border-orange-300 bg-orange-100 text-orange-950 dark:border-orange-700/60 dark:bg-orange-950/80 dark:text-orange-200",
+    desc: "Outer packaging exhibits corner dings, creases, or storage wear. Inner contents thoroughly inspected and undamaged.",
+  },
 ];
 
 function InquiryForm() {
@@ -330,6 +386,65 @@ export default function AboutUs() {
                   <p className="text-[13px] leading-relaxed text-muted-foreground">{desc}</p>
                 </div>
               ))}
+            </div>
+          </section>
+
+          {/* Strict Item-Grading & Authentication Process */}
+          <section aria-labelledby="grading-auth-heading">
+            <div className="mb-4 flex items-end border-b-2 border-foreground pb-2">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-primary" aria-hidden="true" />
+                <h2 id="grading-auth-heading" className="font-display text-lg font-bold tracking-tight text-foreground">
+                  Strict Item-Grading &amp; Authentication Process
+                </h2>
+              </div>
+            </div>
+
+            <p className="mb-6 text-sm leading-relaxed text-foreground">
+              Because Japanese second-hand goods are treasured by collectors worldwide, SURUGA-YA enforces one of the most stringent appraisal and authentication workflows in the reuse industry. Every single pre-owned item is physically handled, tested, and graded by certified Japanese inspectors at our central Shizuoka logistics hub before being cleared for international shipment.
+            </p>
+
+            {/* 4-Pillar Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {GRADING_PILLARS.map(({ icon: Icon, title, desc }) => (
+                <div key={title} className="rounded border border-border bg-card p-5">
+                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded bg-primary/10">
+                    <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                  </div>
+                  <h3 className="mb-1.5 font-display text-sm font-bold text-foreground">{title}</h3>
+                  <p className="text-[13px] leading-relaxed text-muted-foreground">{desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Standardized Condition Scale Guide */}
+            <div className="mt-6 rounded border border-border bg-card p-5">
+              <div className="mb-3 flex items-center justify-between border-b border-border pb-3">
+                <h3 className="font-display text-sm font-bold text-foreground">
+                  Our Standardized Condition Grading Scale
+                </h3>
+                <span className="text-xs text-muted-foreground">
+                  As shown across all storefront listings
+                </span>
+              </div>
+              <ul className="divide-y divide-border/60">
+                {CONDITION_TIERS.map(({ badge, badgeClass, desc }) => (
+                  <li key={badge} className="flex items-start gap-4 py-3 first:pt-1 last:pb-1">
+                    <span className={`inline-flex shrink-0 items-center rounded border px-2 py-0.5 text-xs font-semibold leading-none shadow-xs ${badgeClass}`}>
+                      {badge}
+                    </span>
+                    <p className="text-[13px] leading-relaxed text-foreground">{desc}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Collector Peace-of-Mind Callout */}
+            <div className="mt-4 flex items-center gap-3 rounded border border-primary/20 bg-primary/5 px-4 py-3.5">
+              <Sparkles className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+              <p className="text-xs leading-relaxed text-foreground">
+                <strong>Collector Guarantee:</strong> If an item arrives with discrepancies exceeding its cataloged condition rating, our international support desk works directly with you to resolve it through replacement, partial refund, or return.
+              </p>
             </div>
           </section>
 
