@@ -21,11 +21,59 @@ import {
   Globe,
   Headphones,
   Menu,
+  TrendingUp,
+  Tv,
+  Tag,
+  History,
 } from "lucide-react";
 import { CATS } from "@/components/storefront-shell";
 
 const BASE = "https://www.suruga-ya.com";
 const JPY_PER_CAD = 110;
+
+type Condition = "Brand New" | "Like New" | "Very Good" | "Minor Scratches" | "Box Damaged";
+
+function ConditionBadge({ condition }: { condition: Condition }) {
+  const styles: Record<Condition, string> = {
+    "Brand New":
+      "border-emerald-300 bg-emerald-100 text-emerald-900 dark:border-emerald-700/60 dark:bg-emerald-950/80 dark:text-emerald-200",
+    "Like New":
+      "border-blue-300 bg-blue-100 text-blue-900 dark:border-blue-700/60 dark:bg-blue-950/80 dark:text-blue-200",
+    "Very Good":
+      "border-indigo-300 bg-indigo-100 text-indigo-900 dark:border-indigo-700/60 dark:bg-indigo-950/80 dark:text-indigo-200",
+    "Minor Scratches":
+      "border-amber-300 bg-amber-100 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/80 dark:text-amber-200",
+    "Box Damaged":
+      "border-orange-300 bg-orange-100 text-orange-950 dark:border-orange-700/60 dark:bg-orange-950/80 dark:text-orange-200",
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center rounded border px-1.5 py-0.5 text-[10px] font-semibold leading-none shadow-xs ${styles[condition] || "border-border bg-muted text-foreground"}`}
+    >
+      {condition}
+    </span>
+  );
+}
+
+interface ShelfItem {
+  title: string;
+  id: number;
+  catId: number;
+  price: number;
+  originalPrice?: number;
+  condition: Condition;
+}
+
+interface ShelfData {
+  id: string;
+  title: string;
+  tag: string;
+  icon: typeof TrendingUp;
+  catId: number;
+  items: ShelfItem[];
+}
+
 const HERO = [
   { img: `${BASE}/sites/default/files/2026-08/commatome0905_main_pc_en.jpg`, title: "Buy More & Save", sub: "Stack discounts on multi-item orders" },
   { img: `${BASE}/sites/default/files/2026-08/freeship-0905-_main_pc_en.jpg`, title: "Free Shipping Campaign", sub: "Limited-time worldwide shipping offer" },
@@ -38,28 +86,69 @@ const FEATURES = [
   { img: `${BASE}/sites/default/files/2024-09/ghibli_comtop_pc_en.jpg`, title: "Ghibli Store" },
   { img: `${BASE}/sites/default/files/2025-11/sailormoon_comtop_pc_en.jpg`, title: "Sailor Moon" },
 ];
-const SHELVES = [
+
+const SHELVES: ShelfData[] = [
   {
-    name: "Movies / Television", id: 3, items: [
-      ["Cinnamon and Yasuda Ken's Yurudoki ☆ Cooking Vol. 1", 151132929, 4280],
-      ["Drama Series W: Sunflowers Disappearing in the Rain DVD-Box", 136016879, 9800],
-      ["Taiga Drama Gunshi Kanbei Complete Collection", 136018651, 24500],
-      ["FIBA Basketball World Cup '94 Dream Team II", 951034033, 1980],
-      ["Tokyo Camouflage Hour Blu-ray Box", 436002847, 12800],
-      ["Stage WIND BREAKER Aniplex Online Special DISC", 151133780, 3600],
+    id: "trending-items",
+    title: "Trending Items",
+    tag: "Popular Now",
+    icon: TrendingUp,
+    catId: 2,
+    items: [
+      { title: "The Legend of Zelda: Tears of the Kingdom Collector's Edition", id: 220512831, catId: 2, price: 11800, condition: "Like New" },
+      { title: "Nendoroid Frieren: Beyond Journey's End #2348", id: 151299842, catId: 5, price: 6400, condition: "Brand New" },
+      { title: "Pokémon Card Game Scarlet & Violet: 151 Enhanced Booster Box", id: 136098231, catId: 5, price: 14500, condition: "Brand New" },
+      { title: "Neon Genesis Evangelion: 3.0+1.01 Thrice Upon a Time [4K UHD BD]", id: 436009812, catId: 3, price: 8200, condition: "Like New" },
+      { title: "Persona 3 Reload Limited Box (PlayStation 5 Edition)", id: 221004921, catId: 2, price: 13200, condition: "Minor Scratches" },
+      { title: "Chainsaw Man - Makima 1/7 Scale Pre-painted PVC Figure", id: 151199340, catId: 5, price: 18900, condition: "Very Good" },
     ],
   },
   {
-    name: "Music", id: 4, items: [
-      ["Ty Segall / Goodbye Bread", 221126284, 1450],
-      ["Fumiya Fujii / ANNIVERSARY BEST \"25/35\" (Blu-spec CD2)", 220246964, 3280],
-      ["Christopher Hogwood / Vivaldi: Concertos [Import]", 216020877, 880],
-      ["Ryo Mizutsuki 25th Anniversary Album \"Flowing Around\"", 340016037, 2200],
-      ["Eiko Seyama / Machiko Irie / The Autumn of Blindness", 230049462, 1100],
-      ["The Confessions / All The Time [Import]", 211080258, 760],
+    id: "currently-airing",
+    title: "Currently Airing",
+    tag: "Fall Season Anime",
+    icon: Tv,
+    catId: 3,
+    items: [
+      { title: "Solo Leveling - Sung Jinwoo ARTFX J 1/8 Scale Figure", id: 151322901, catId: 5, price: 16800, condition: "Brand New" },
+      { title: "Delicious in Dungeon (Dungeon Meshi) Official Adventurer's Guide", id: 171092834, catId: 7, price: 2100, condition: "Like New" },
+      { title: "Demon Slayer: Kimetsu no Yaiba - Hashira Training Arc Theme Single", id: 221088421, catId: 4, price: 3400, condition: "Brand New" },
+      { title: "Kaiju No. 8 - S.H.Figuarts Action Figure (Bandai Spirits)", id: 151334812, catId: 5, price: 6200, condition: "Like New" },
+      { title: "Oshi no Ko Character Song Vol. 3 with Exclusive Bonus Acrylic Stand", id: 220993412, catId: 4, price: 2400, condition: "Minor Scratches" },
+      { title: "My Hero Academia Final Season Acrylic Diorama - Deku & Shigaraki", id: 181044231, catId: 10, price: 3100, condition: "Like New" },
     ],
   },
-] as const;
+  {
+    id: "price-drops",
+    title: "Price Drops",
+    tag: "Special Offers",
+    icon: Tag,
+    catId: 2,
+    items: [
+      { title: "Final Fantasy VII Rebirth Deluxe Edition (PlayStation 5)", id: 220551982, catId: 2, price: 7200, originalPrice: 9800, condition: "Like New" },
+      { title: "Bocchi the Rock! Complete Season 1 Limited Blu-ray Box Set", id: 436021942, catId: 3, price: 15400, originalPrice: 19800, condition: "Minor Scratches" },
+      { title: "Super Mario RPG Remake (Nintendo Switch Japanese Ver.)", id: 220491823, catId: 2, price: 3980, originalPrice: 5400, condition: "Very Good" },
+      { title: "NieR:Automata Ver1.1a 2B (YoRHa No.2 Type B) 1/7 Scale Figure", id: 151244910, catId: 5, price: 12500, originalPrice: 16000, condition: "Box Damaged" },
+      { title: "Spy x Family Code: White Limited Edition Steelbook [Blu-ray]", id: 436099120, catId: 3, price: 4900, originalPrice: 6800, condition: "Like New" },
+      { title: "Hatsune Miku Vintage Dress Ver. 1/7 Scale PVC Figure", id: 151088492, catId: 5, price: 9800, originalPrice: 13500, condition: "Minor Scratches" },
+    ],
+  },
+  {
+    id: "recently-viewed",
+    title: "Recently Viewed",
+    tag: "Your Browsing History",
+    icon: History,
+    catId: 2,
+    items: [
+      { title: "Nintendo Switch OLED Model White System (Japanese Region Free)", id: 220993012, catId: 2, price: 32800, condition: "Like New" },
+      { title: "Studio Ghibli 7-inch Vinyl Soundtrack Box (Limited 4-Disc LP Set)", id: 221039841, catId: 4, price: 22000, condition: "Brand New" },
+      { title: "Jujutsu Kaisen Season 2: Shibuya Incident Special Edition Blu-ray", id: 436033819, catId: 3, price: 5600, condition: "Like New" },
+      { title: "One Piece Card Game: Romance Dawn [OP-01] Japanese Booster Box", id: 136081290, catId: 5, price: 18500, condition: "Brand New" },
+      { title: "Super Famicom (SFC) Console System - Boxed Complete Japanese Set", id: 220199401, catId: 2, price: 6800, condition: "Minor Scratches" },
+      { title: "Ghost in the Shell: Stand Alone Complex Solid State Society Blu-ray", id: 436011928, catId: 3, price: 4200, condition: "Very Good" },
+    ],
+  },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -203,40 +292,80 @@ function SectionHead({ title, href }: { title: string; href?: string }) {
   );
 }
 
-function Shelf({ s }: { s: (typeof SHELVES)[number] }) {
-  const cat = CATS.find((c) => c.id === s.id);
-  if (!cat) return null;
+function Shelf({ s }: { s: ShelfData }) {
+  const fallbackCat = CATS[0]!;
   return (
     <section aria-labelledby={`shelf-title-${s.id}`}>
       <div className="mb-3 flex items-end justify-between border-b-2 border-foreground pb-2">
-        <h2 id={`shelf-title-${s.id}`} className="font-display text-lg font-bold tracking-tight text-foreground">
-          New Arrivals · {s.name}
-        </h2>
-        <a href={`${BASE}/en/category/${s.id}`} className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline focus:outline-none focus:ring-1 focus:ring-primary">
+        <div className="flex items-center gap-2">
+          {s.icon && <s.icon className="h-5 w-5 text-primary" aria-hidden="true" />}
+          <h2 id={`shelf-title-${s.id}`} className="font-display text-lg font-bold tracking-tight text-foreground">
+            {s.title}
+          </h2>
+          {s.tag && (
+            <span className="rounded bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+              {s.tag}
+            </span>
+          )}
+        </div>
+        <a
+          href={`${BASE}/en/category/${s.catId}`}
+          className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline focus:outline-none focus:ring-1 focus:ring-primary"
+        >
           View all <ChevronRight className="h-3 w-3" aria-hidden="true" />
         </a>
       </div>
       <div className="grid grid-cols-6 gap-4">
-        {s.items.map(([title, id, price]) => (
-          <a
-            key={id}
-            href={`${BASE}/en/product/${id}`}
-            aria-label={`${title}, ¥${price.toLocaleString()}, approximately CA$${(price / JPY_PER_CAD).toFixed(2)}, In stock`}
-            className="group rounded border border-border bg-card p-3 transition hover:border-primary hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary"
-          >
-            <div className="mb-3 flex aspect-square items-center justify-center rounded bg-muted">
-              <cat.icon className="h-10 w-10 text-muted-foreground/60" aria-hidden="true" />
-            </div>
-            <div className="line-clamp-2 h-9 text-[13px] leading-snug text-foreground group-hover:text-primary">{title}</div>
-            <div className="mt-2 flex items-baseline justify-between">
+        {s.items.map((item) => {
+          const cat = CATS.find((c) => c.id === item.catId) ?? fallbackCat;
+          const discountPercent = item.originalPrice
+            ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)
+            : null;
+
+          return (
+            <a
+              key={item.id}
+              href={`${BASE}/en/product/${item.id}`}
+              aria-label={`${item.title}, Condition: ${item.condition}, Price: ¥${item.price.toLocaleString()}${item.originalPrice ? `, was ¥${item.originalPrice.toLocaleString()}` : ""}, approximately CA$${(item.price / JPY_PER_CAD).toFixed(2)}, In stock`}
+              className="group relative flex flex-col justify-between rounded border border-border bg-card p-3 transition hover:border-primary hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary"
+            >
               <div>
-                <span className="font-display text-base font-bold text-primary">¥{price.toLocaleString()}</span>
-                <div className="text-[11px] font-medium text-muted-foreground">≈ CA${(price / JPY_PER_CAD).toFixed(2)}</div>
+                <div className="relative mb-3 flex aspect-square items-center justify-center rounded bg-muted">
+                  <cat.icon className="h-10 w-10 text-muted-foreground/60" aria-hidden="true" />
+                  <div className="absolute left-2 top-2">
+                    <ConditionBadge condition={item.condition} />
+                  </div>
+                  {discountPercent && (
+                    <span className="absolute right-2 top-2 rounded bg-destructive px-1.5 py-0.5 text-[10px] font-bold text-destructive-foreground">
+                      -{discountPercent}%
+                    </span>
+                  )}
+                </div>
+                <div className="line-clamp-2 h-9 text-[13px] leading-snug text-foreground group-hover:text-primary">
+                  {item.title}
+                </div>
               </div>
-              <span className="text-[11px] font-semibold text-success">In stock</span>
-            </div>
-          </a>
-        ))}
+              <div className="mt-2 border-t border-border/50 pt-2 flex items-baseline justify-between">
+                <div>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="font-display text-base font-bold text-primary">
+                      ¥{item.price.toLocaleString()}
+                    </span>
+                    {item.originalPrice && (
+                      <span className="text-[11px] font-medium text-muted-foreground line-through">
+                        ¥{item.originalPrice.toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[11px] font-medium text-muted-foreground">
+                    ≈ CA${(item.price / JPY_PER_CAD).toFixed(2)}
+                  </div>
+                </div>
+                <span className="text-[11px] font-semibold text-success">In stock</span>
+              </div>
+            </a>
+          );
+        })}
       </div>
     </section>
   );
