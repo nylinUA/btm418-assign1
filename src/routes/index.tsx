@@ -1,26 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
-  Search,
-  ShoppingCart,
-  User,
-  Heart,
   ChevronRight,
   ChevronLeft,
-  Film,
-  Music,
-  Gamepad2,
-  Monitor,
-  Plug,
-  BookOpen,
-  Shirt,
-  Puzzle,
-  PenTool,
   Truck,
   ShieldCheck,
   Globe,
   Headphones,
-  Menu,
   TrendingUp,
   Tv,
   Tag,
@@ -211,10 +197,26 @@ function Hero() {
             aria-selected={k === i}
             aria-label={`Slide ${k + 1}: ${h.title}`}
             onClick={() => setI(k)}
-            className={`flex-1 border-t-2 px-4 py-2.5 text-left transition focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset ${k === i ? "border-primary font-semibold" : "border-transparent hover:bg-muted"}`}
+            className={`min-w-0 border-t-2 px-2.5 py-2 text-left transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset ${
+              k === i
+                ? "flex-[1.35] border-primary font-semibold bg-muted/30"
+                : "flex-1 border-transparent hover:bg-muted"
+            }`}
           >
-            <div className="text-xs font-semibold text-foreground">{h.title}</div>
-            <div className="truncate text-[11px] text-muted-foreground">{h.sub}</div>
+            <div
+              className={`text-xs font-semibold text-foreground ${
+                k === i ? "whitespace-normal leading-tight" : "truncate"
+              }`}
+            >
+              {h.title}
+            </div>
+            <div
+              className={`text-[11px] text-muted-foreground ${
+                k === i ? "whitespace-normal leading-tight" : "truncate"
+              }`}
+            >
+              {h.sub}
+            </div>
           </button>
         ))}
       </div>
@@ -276,19 +278,6 @@ function RightRail() {
         </ul>
       </div>
     </aside>
-  );
-}
-
-function SectionHead({ title, href }: { title: string; href?: string }) {
-  return (
-    <div className="mb-3 flex items-end justify-between border-b-2 border-foreground pb-2">
-      <h2 className="font-display text-lg font-bold tracking-tight text-foreground">{title}</h2>
-      {href && (
-        <a href={href} className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline focus:outline-none focus:ring-1 focus:ring-primary">
-          View all <ChevronRight className="h-3 w-3" aria-hidden="true" />
-        </a>
-      )}
-    </div>
   );
 }
 
@@ -375,7 +364,6 @@ function Index() {
   return (
     <>
       <main id="main-content" className="mx-auto max-w-[1320px] space-y-8 px-6 py-6" tabIndex={-1}>
-        {/* WCAG 1.3.1 / 2.4.6: Level-one heading for the landing page */}
         <h1 className="sr-only">Suruga-ya — Japanese Specialty Games, Anime, Music &amp; Collectibles Storefront</h1>
 
         <div className="grid grid-cols-[240px_1fr_260px] gap-4">
